@@ -1,6 +1,6 @@
 // Box dimensions
 box_x = 80;
-box_y = 40;
+box_y = 46;
 box_z = 20;
 
 // Pocket dimensions
@@ -8,8 +8,8 @@ pocket_radius = 21;
 pocket_depth  = 17;
 
 // Position
-cylinder_x_wall = 15;
-cylinder_y_wall = 8;
+shield_x_wall = 15;
+shield_y_wall = 10;
 
 wound_x_wall = 40;
 wound_y_wall = 10;
@@ -17,8 +17,15 @@ wound_y_wall = 10;
 ion_x_wall = 65;
 ion_y_wall = 0;
 
-vehicle_x_wall = 4;
-vehicle_y_wall = box_y-10;
+// Opposite side of holder
+vehicle_x_wall = 30;
+vehicle_y_wall = box_y-12;
+
+commander_x_wall = 14;
+commander_y_wall = box_y-10;
+
+aim_x_wall = 64;
+aim_y_wall = box_y-8;
 
 ion_tri_length = 5;
 niblet_length = 3.5;
@@ -117,13 +124,40 @@ module create_vehicle_token(){
     }
 }
 
+module create_commander_token(){
+    //Commander token
+    polygon(points=[
+        [12, 0],        // Point A
+        [0, 12],        // Point B
+        [-12, 0],       // Point C
+        [-6.5, -12],       // Point D
+        [6.5, -12],       // Point E
+        ]);
+}
+
+module create_aim_token(){
+    // Parameters
+    side = 7.5;   // side length in mm
+    n = 8;      // octagon
+
+    // Circumradius calculation
+    R = side / sqrt(2 - 2 * cos(360 / n));
+
+    // Draw octagon
+    polygon(points = [
+        for (i = [0:n-1])
+            [ R * cos(360/n * i),
+              R * sin(360/n * i) ]
+    ]);
+}
+
 difference() {
     // Outer box
     cube([box_x, box_y, box_z]);
 
-    // Cylindrical pocket
-    translate([cylinder_x_wall,
-    cylinder_y_wall, box_z+0.1 - pocket_depth])
+    // Shield pocket
+    translate([shield_x_wall,
+    shield_y_wall, box_z+0.1 - pocket_depth])
         cylinder(
             h = pocket_depth,
             d = pocket_radius,
@@ -159,10 +193,24 @@ difference() {
             create_ion_token();
         }    
     }
-    
+    //Create vehicle token
     translate([vehicle_x_wall,vehicle_y_wall-0.1,box_z+0.1- pocket_depth]){
         linear_extrude(height=pocket_depth){
             create_vehicle_token();
+        }    
+    }
+    
+    //Create commander token
+    translate([commander_x_wall,commander_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            create_commander_token();
+        }    
+    }
+    
+    //Create aim token
+    translate([aim_x_wall,aim_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            create_aim_token();
         }    
     }
 }
