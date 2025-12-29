@@ -28,7 +28,7 @@ aim_x_wall = 64;
 aim_y_wall = box_y-8;
 
 ion_tri_length = 5;
-niblet_length = 3.5;
+niblet_length = 3.8;
 module ion_tri_piece_1 () {
     translate([2, niblet_length, 0]){
        polygon(points=[
@@ -44,13 +44,13 @@ module ion_point_niblet(){
         ion_tri_piece_1();
     }
     translate([2, -(niblet_length+0.01), 0]){
-        square([ion_tri_length,((niblet_length * 2) + 0.02)]); //0.2 used here to connect triangles to square
+        square([ion_tri_length+0.3,((niblet_length * 2) + 0.02)]); //0.2 used here to connect triangles to square
     }    
 }
 
 module create_ion_token(){
     // ion Side length
-    s = 22;
+    s = 23;
     // Height of ion equilateral triangle
     h = s * sqrt(3) / 2;
     //Start of the ion token creation. No, it can't be refactored
@@ -84,7 +84,7 @@ module create_ion_token(){
                             }
                         }
                         //second niblet
-                        translate([0,-0.8,0]){
+                        translate([0,-0.5,0]){
                             rotate([0,0,90]){
                                 ion_point_niblet();
                             }
@@ -106,7 +106,7 @@ module create_vehicle_token(){
     //vehicle_tri_side
     vehicle_tri_height_from_base = 7.25;
     vehicle_tri_base_len = 18;
-    vehicle_tri_square_height = 7;
+    vehicle_tri_square_height = 8.5;
     square([vehicle_tri_base_len,vehicle_tri_square_height+0.02]);
     mirror([0,1,0]){
         polygon(points=[
@@ -128,16 +128,16 @@ module create_commander_token(){
     //Commander token
     polygon(points=[
         [12, 0],        // Point A
-        [0, 12],        // Point B
-        [-12, 0],       // Point C
-        [-6.5, -12],       // Point D
-        [6.5, -12],       // Point E
+        [0, 12.3],        // Point B
+        [-12.3, 0],       // Point C
+        [-6.8, -12.8],       // Point D
+        [6.3, -12.8],       // Point E
         ]);
 }
 
 module create_aim_token(){
     // Parameters
-    side = 7.5;   // side length in mm
+    side = 7.3;   // side length in mm
     n = 8;      // octagon
 
     // Circumradius calculation
@@ -156,22 +156,28 @@ difference() {
     cube([box_x, box_y, box_z]);
 
     // Shield pocket
-    translate([shield_x_wall,
-    shield_y_wall, box_z+0.1 - pocket_depth])
-        cylinder(
-            h = pocket_depth,
-            d = pocket_radius,
-            $fn = 64
-        );
+    union(){
+        translate([shield_x_wall,
+        shield_y_wall, box_z+0.1 - pocket_depth])
+            cylinder(
+                h = pocket_depth,
+                d = pocket_radius,
+                $fn = 64
+            );
+        translate([shield_x_wall-(pocket_radius*0.33),
+        -0.01, box_z+0.1 - pocket_depth])linear_extrude(
+        height=pocket_depth)square(
+        [pocket_radius*0.66,4]);
+    }
    // wound token pocket
    translate([wound_x_wall,
     wound_y_wall, box_z+0.1 - pocket_depth])
     linear_extrude(height=pocket_depth){
     union(){
-        circle(d=17);
-        wound_points = [[6, -6],
-        [-6, 6],
-        [9.5, 9.5]];
+        circle(d=16);
+        wound_points = [[5.5, -5.5],
+        [-5.5, 5.5],
+        [9.0, 9.0]];
         
         polygon(points = wound_points);
 
@@ -184,13 +190,14 @@ difference() {
         mirror([1,1,0]){
             polygon(points = wound_points);
         }
-        translate([-5, -10.1, 0])square([10, 10]);
+        translate([-8, -10.1, 0])square([16, 3]);
         }
     }
     //ion token pocket
     translate([ion_x_wall,ion_y_wall-0.1,box_z+0.1- pocket_depth]){
         linear_extrude(height=pocket_depth){
             create_ion_token();
+            translate([-7,0])square([14,5]); //extra cutout for ion
         }    
     }
     //Create vehicle token
@@ -211,6 +218,7 @@ difference() {
     translate([aim_x_wall,aim_y_wall-0.1,box_z+0.1- pocket_depth]){
         linear_extrude(height=pocket_depth){
             create_aim_token();
+            translate([-6,5])square([12,5]);
         }    
     }
 }
