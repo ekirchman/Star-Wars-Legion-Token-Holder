@@ -18,8 +18,8 @@ ion_x_wall = 65;
 ion_y_wall = 0;
 
 // Opposite side of holder
-vehicle_x_wall = 30;
-vehicle_y_wall = box_y-12;
+vehicle_x_wall = 45;
+vehicle_y_wall = box_y-16;
 
 commander_x_wall = 14;
 commander_y_wall = box_y-10;
@@ -105,7 +105,7 @@ module create_ion_token(){
 module create_vehicle_token(){
     //vehicle_tri_side
     vehicle_tri_height_from_base = 7.25;
-    vehicle_tri_base_len = 18;
+    vehicle_tri_base_len = 17;
     vehicle_tri_square_height = 8.5;
     square([vehicle_tri_base_len,vehicle_tri_square_height+0.02]);
     mirror([0,1,0]){
@@ -137,7 +137,7 @@ module create_commander_token(){
 
 module create_aim_token(){
     // Parameters
-    side = 7.3;   // side length in mm
+    side = 7.1;   // side length in mm
     n = 8;      // octagon
 
     // Circumradius calculation
@@ -202,14 +202,14 @@ difference() {
     }
     //Create vehicle token
     translate([vehicle_x_wall,vehicle_y_wall-0.1,box_z+0.1- pocket_depth]){
-        linear_extrude(height=pocket_depth){
+        rotate([0,0,90])linear_extrude(height=pocket_depth){
             create_vehicle_token();
         }    
     }
     
     //Create commander token
     translate([commander_x_wall,commander_y_wall-0.1,box_z+0.1- pocket_depth]){
-        linear_extrude(height=pocket_depth){
+        rotate([0,0,180])linear_extrude(height=pocket_depth){
             create_commander_token();
         }    
     }
@@ -222,3 +222,4 @@ difference() {
         }    
     }
 }
+   
