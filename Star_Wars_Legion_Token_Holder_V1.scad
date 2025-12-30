@@ -50,7 +50,7 @@ module ion_point_niblet(){
 
 module create_ion_token(){
     // ion Side length
-    s = 23;
+    s = 24;
     // Height of ion equilateral triangle
     h = s * sqrt(3) / 2;
     //Start of the ion token creation. No, it can't be refactored
