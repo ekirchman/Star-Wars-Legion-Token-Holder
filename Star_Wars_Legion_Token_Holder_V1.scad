@@ -1,5 +1,5 @@
 // Box dimensions
-box_x = 80;
+box_x = 120;
 box_y = 46;
 box_z = 20;
 
@@ -11,11 +11,17 @@ pocket_depth  = 17;
 shield_x_wall = 15;
 shield_y_wall = 10;
 
-wound_x_wall = 40;
+wound_x_wall = 90;
 wound_y_wall = 10;
 
 ion_x_wall = 65;
 ion_y_wall = 0;
+
+obs_x_wall = 40;
+obs_y_wall = 10;
+
+surge_x_wall = 110;
+surge_y_wall = 7;
 
 // Opposite side of holder
 vehicle_x_wall = 45;
@@ -27,7 +33,13 @@ commander_y_wall = box_y-10;
 aim_x_wall = 64;
 aim_y_wall = box_y-8;
 
-ion_tri_length = 5;
+stby_x_wall = 85;
+stby_y_wall = box_y-8;
+
+sup_x_wall = 105;
+sup_y_wall = box_y-8;
+
+ion_tri_length = 6.5;
 niblet_length = 3.8;
 module ion_tri_piece_1 () {
     translate([2, niblet_length, 0]){
@@ -84,7 +96,7 @@ module create_ion_token(){
                             }
                         }
                         //second niblet
-                        translate([0,-0.5,0]){
+                        translate([0,-2,0]){
                             rotate([0,0,90]){
                                 ion_point_niblet();
                             }
@@ -135,9 +147,9 @@ module create_commander_token(){
         ]);
 }
 
-module create_aim_token(){
+module create_octogon(input_side){
     // Parameters
-    side = 7.1;   // side length in mm
+    side = input_side;   // side length in mm
     n = 8;      // octagon
 
     // Circumradius calculation
@@ -148,9 +160,137 @@ module create_aim_token(){
         for (i = [0:n-1])
             [ R * cos(360/n * i),
               R * sin(360/n * i) ]
-    ]);
+    ]);    
 }
 
+module create_aim_token(){
+    create_octogon(input_side=7.1);
+}
+
+module create_standby_token(){
+    create_octogon(input_side=7.6);
+}
+
+module obs_arrow(){
+    radius = 16;
+    angle = 45;   // degrees
+
+    polygon(points = concat(
+        [[0,0]],
+        [ for (a = [0:1:angle])
+            [ radius * cos(a), radius * sin(a) ]
+        ]
+    ));
+}
+
+//observation token
+module create_observation_token(){
+    union(){
+    obs_arrow();
+    rotate([0,0,120]){
+        union(){
+            obs_arrow();
+            rotate([0,0,120]){
+                union(){
+                    circle(r=9.25);
+                    obs_arrow();
+                    }
+                }
+            }
+        }
+    }
+}
+
+module sup_diff(){
+    rect_len = 5;
+    translate([2, -3.51, 0]){
+        square([rect_len,7.02]); //0.2 used here to connect triangles
+    }    
+}
+
+module sup_arrows(h){
+    translate([-2,0,0])square([4,(h*(1/3))+2]);
+}
+
+module create_sup_token(){
+    // ion Side length
+    supression_s = 22;
+    // Height of supression equilateral triangle
+    supression_h = supression_s * sqrt(3) / 2;
+   union(){
+        sup_arrows(supression_h);
+        rotate([0,0,120]){ 
+            union(){
+                sup_arrows(supression_h);
+                rotate([0,0,120]){
+                    union(){
+                        sup_arrows(supression_h);
+                        translate([0,-(supression_h/3)*2,0]){
+                            difference(){
+                                translate([0,(supression_h/3)*2,0]){
+                                    rotate([0,0,60]){
+                                        translate([0,(supression_h/3),0]){
+                                            difference(){
+                                                translate([0,-(supression_h/3)*1,0]){
+                                                    rotate([0,0,60]){
+                                                        translate([0,-((supression_h/3)*2),0]){
+                                                            difference(){
+                                                                
+                                                                //ion token base
+                                                                //rotate so we can align the niblets
+                                                                rotate([0,0,60]){ 
+                                                                    polygon(points=[
+                                                                    [0, 0],        // Point A
+                                                                    [supression_s, 0],        // Point B
+                                                                    [supression_s/2, supression_h]       // Point C
+                                                                    ]);
+                                                                }
+                                                                //first niblet
+                                                                
+                                                                translate([0,-5,0]){
+                                                                    rotate([0,0,90]){
+                                                                        sup_diff();
+                                                                    }
+                                                                }
+                                                                
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                //second niblet
+                                                translate([0,2,0]){
+                                                    rotate([0,0,90]){
+                                                        sup_diff();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //third niblet
+                                translate([0,-5,0]){
+                                    rotate([0,0,90]){
+                                        sup_diff();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+module create_surge_token(){
+    size = 15;     // square side length (mm)
+    radius = 2;    // corner radius (mm)
+
+    offset(r = radius)
+    square(size - 2*radius, center=true);
+}
+
+//Create holder box
 difference() {
     // Outer box
     cube([box_x, box_y, box_z]);
@@ -221,5 +361,46 @@ difference() {
             translate([-6,5])square([12,5]);
         }    
     }
+    
+    //Create observation token
+    translate([obs_x_wall,obs_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            rotate([0,0,90])create_observation_token();
+            //translate([-6,5])square([12,5]);
+        }    
+    }
+    
+    //Create standby token
+    translate([stby_x_wall,stby_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            rotate([0,0,90])create_standby_token();
+            translate([-6,5])square([12,5]);
+        }    
+    }
+    
+    //Create supression token
+    translate([sup_x_wall,sup_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            create_sup_token();
+            translate([-6,5])square([12,5]);
+        }    
+    }
+    
+    //Create surge token
+    translate([surge_x_wall,surge_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            create_surge_token();
+            //translate([-6,5])square([12,5]);
+        }    
+    }
+    
 }
-   
+/*
+//Create surge token
+    translate([surge_x_wall,surge_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            color("red")create_surge_token();
+            //translate([-6,5])square([12,5]);
+        }    
+    }
+*/
