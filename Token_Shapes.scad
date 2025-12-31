@@ -1,6 +1,6 @@
 ion_tri_length = 6.5;
-niblet_length = 3.8;
-module ion_tri_piece_1 () {
+//niblet_length = 3.8;
+module ion_tri_piece_1 (niblet_length) {
     translate([2, niblet_length, 0]){
        polygon(points=[
         [0, 0],        // Point A
@@ -9,17 +9,17 @@ module ion_tri_piece_1 () {
     ]); 
     }
 }
-module ion_point_niblet(){
-    ion_tri_piece_1();
+module ion_point_niblet(niblet_length){
+    ion_tri_piece_1(niblet_length);
     mirror([0, 1, 0]){
-        ion_tri_piece_1();
+        ion_tri_piece_1(niblet_length);
     }
     translate([2, -(niblet_length+0.01), 0]){
         square([ion_tri_length+0.3,((niblet_length * 2) + 0.02)]); //0.2 used here to connect triangles to square
     }    
 }
 
-module create_ion_token(ion_scale=[1.03,1.03]){
+module create_ion_token(ion_scale=[1.01,1.01], niblet_length = 3.6){
     // ion Side length
     s = 23;
     // Height of ion equilateral triangle
@@ -37,7 +37,7 @@ module create_ion_token(ion_scale=[1.03,1.03]){
                                         //first niblet
                                         translate([0,-2,0]){
                                             rotate([0,0,90]){
-                                                ion_point_niblet();
+                                                ion_point_niblet(niblet_length);
                                             }
                                         }
                                         
@@ -57,7 +57,7 @@ module create_ion_token(ion_scale=[1.03,1.03]){
                         //second niblet
                         translate([0,-2,0]){
                             rotate([0,0,90]){
-                                ion_point_niblet();
+                                ion_point_niblet(niblet_length);
                             }
                         }
                     }
@@ -67,18 +67,10 @@ module create_ion_token(ion_scale=[1.03,1.03]){
         //third niblet
         translate([0,-2,0]){
             rotate([0,0,90]){
-                ion_point_niblet();
+                ion_point_niblet(niblet_length);
             }
         }
     }
-}
-
-module create_surge_token(){
-    size = 15.25;     // square side length (mm)
-    radius = 2;    // corner radius (mm)
-
-    offset(r = radius)
-    square(size - 2*radius, center=true);
 }
 
 module obs_arrow(){
@@ -93,7 +85,7 @@ module obs_arrow(){
     ));
 }
 //observation token
-module create_observation_token(){
+module create_old_observation_token(){
     union(){
     obs_arrow();
     rotate([0,0,120]){
@@ -108,4 +100,210 @@ module create_observation_token(){
             }
         }
     }
+}
+
+module create_vehicle_token(){
+    //vehicle_tri_side
+    vehicle_tri_height_from_base = 7.25;
+    vehicle_tri_base_len = 17;
+    vehicle_tri_square_height = 8.5;
+    square([vehicle_tri_base_len,vehicle_tri_square_height+0.02]);
+    mirror([0,1,0]){
+        polygon(points=[
+        [0, 0],        // Point A
+        [vehicle_tri_base_len, 0],        // Point B
+        [vehicle_tri_base_len/2, vehicle_tri_height_from_base]       // Point C
+        ]);
+    }
+    translate([0,vehicle_tri_square_height,0]){
+        polygon(points=[
+            [0, 0],        // Point A
+            [vehicle_tri_base_len, 0],        // Point B
+            [vehicle_tri_base_len/2, vehicle_tri_height_from_base]       // Point C
+            ]);
+    }
+}
+
+module create_commander_token(){
+    //Commander token
+    polygon(points=[
+        [12, 0],        // Point A
+        [0, 12.3],        // Point B
+        [-12.3, 0],       // Point C
+        [-6.8, -12.8],       // Point D
+        [6.3, -12.8],       // Point E
+        ]);
+}
+
+
+module create_octogon(input_side){
+    // Parameters
+    side = input_side;   // side length in mm
+    n = 8;      // octagon
+
+    // Circumradius calculation
+    R = side / sqrt(2 - 2 * cos(360 / n));
+
+    // Draw octagon
+    polygon(points = [
+        for (i = [0:n-1])
+            [ R * cos(360/n * i),
+              R * sin(360/n * i) ]
+    ]);    
+}
+
+module create_aim_token(){
+    create_octogon(input_side=7.1);
+}
+
+module create_standby_token(){
+    create_octogon(input_side=7.6);
+}
+
+module obs_arrow(){
+    radius = 16;
+    angle = 45;   // degrees
+
+    polygon(points = concat(
+        [[0,0]],
+        [ for (a = [0:1:angle])
+            [ radius * cos(a), radius * sin(a) ]
+        ]
+    ));
+}
+
+
+module sup_diff(){
+    rect_len = 5;
+    translate([2, -3.51, 0]){
+        square([rect_len,7.02]); //0.2 used here to connect triangles
+    }    
+}
+
+module sup_arrows(h){
+    translate([-2,0,0])square([4,(h*(1/3))+2]);
+}
+
+module create_sup_token(sup_scale=[1.2,1.2]){
+    // ion Side length
+    supression_s = 22;
+    // Height of supression equilateral triangle
+    supression_h = supression_s * sqrt(3) / 2;
+   scale(sup_scale)union(){
+        sup_arrows(supression_h);
+        rotate([0,0,120]){ 
+            union(){
+                sup_arrows(supression_h);
+                rotate([0,0,120]){
+                    union(){
+                        sup_arrows(supression_h);
+                        translate([0,-(supression_h/3)*2,0]){
+                            difference(){
+                                translate([0,(supression_h/3)*2,0]){
+                                    rotate([0,0,60]){
+                                        translate([0,(supression_h/3),0]){
+                                            difference(){
+                                                translate([0,-(supression_h/3)*1,0]){
+                                                    rotate([0,0,60]){
+                                                        translate([0,-((supression_h/3)*2),0]){
+                                                            difference(){
+                                                                
+                                                                //ion token base
+                                                                //rotate so we can align the niblets
+                                                                rotate([0,0,60]){ 
+                                                                    polygon(points=[
+                                                                    [0, 0],        // Point A
+                                                                    [supression_s, 0],        // Point B
+                                                                    [supression_s/2, supression_h]       // Point C
+                                                                    ]);
+                                                                }
+                                                                //first niblet
+                                                                
+                                                                translate([0,-5,0]){
+                                                                    rotate([0,0,90]){
+                                                                        sup_diff();
+                                                                    }
+                                                                }
+                                                                
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                //second niblet
+                                                translate([0,2,0]){
+                                                    rotate([0,0,90]){
+                                                        sup_diff();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //third niblet
+                                translate([0,-5,0]){
+                                    rotate([0,0,90]){
+                                        sup_diff();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+module create_surge_token(surge_size=15.25){
+    size = surge_size;  // square side length (mm)
+    radius = 2;    // corner radius (mm)
+
+    offset(r = radius)
+    square(size - 2*radius, center=true);
+}
+
+module create_dodge_token(){
+    circle(r = 10.25, $fn = 6);
+}
+
+module create_dodge_icon(){
+    dodge_icon_rad =4.25;
+    square_x_translate = 4;
+    square_y_translate = -(dodge_icon_rad/2);
+    rotate([0,0,60]){
+        union(){
+            translate([square_x_translate,square_y_translate])square(dodge_icon_rad,dodge_icon_rad);
+            rotate([0,0,60]){
+                union(){
+                    translate([square_x_translate,square_y_translate])square(dodge_icon_rad,dodge_icon_rad);
+                    rotate([0,0,60]){
+                        union(){
+                            translate([square_x_translate,square_y_translate])square(dodge_icon_rad,dodge_icon_rad);
+                            rotate([0,0,60]){
+                                union(){
+                                    translate([square_x_translate,square_y_translate])square(dodge_icon_rad,dodge_icon_rad);
+                                    rotate([0,0,60]){
+                                        union(){
+                                            translate([square_x_translate,square_y_translate])square(dodge_icon_rad,dodge_icon_rad);
+                                            rotate([0,0,60]){
+                                                union(){
+                                                    rotate([0,0,90])circle(r = dodge_icon_rad, $fn = 6);
+                                                    translate([square_x_translate,square_y_translate])square(dodge_icon_rad,dodge_icon_rad);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+module create_observation_token(){
+    circle(r = 9.75);
+
 }
