@@ -335,3 +335,48 @@ module create_wound_token(){
         translate([-8, -10.1, 0])square([16, wound_square_size]);
         }
 }
+
+module shield_icon(){
+    translate([-140,-203,0])import("svgs/shield.svg");
+    /*
+    ring1 = 20;
+    ring2 = 14;
+    ring3 = 8;
+    scale([0.3,0.3])
+    union(){
+        circle(r=4);
+
+        difference(){
+            circle(r=ring1);
+            circle(r=ring1-0.5);
+        }
+        rotate([0,0,0])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,180])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,60])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,90])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,270])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,310])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,230])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,290])translate([-0.5,0])square([1,ring2]);
+        rotate([0,0,140])translate([-0.5,0])square([1,ring2]);
+        rotate([0,0,30])translate([-0.5,0])square([1,ring2]);
+        rotate([0,0,120])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,340])translate([-0.5,0])square([1,ring1]);
+        rotate([0,0,200])translate([-0.5,0])square([1,ring2]);
+
+        difference(){
+            circle(r=ring2);
+            circle(r=ring2-0.5);
+        }
+
+        difference(){
+            circle(r=ring3);
+            circle(r=ring3-0.5);
+        }
+    }
+    */
+}
+
+module wound_icon(){
+    import("svgs/wound.svg");
+}

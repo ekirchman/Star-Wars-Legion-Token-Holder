@@ -36,7 +36,7 @@ obs_x_wall = -20;
 obs_y_wall = -box_rad+((9.75*2)-1);
 
 surge_x_wall = 10;
-surge_y_wall = -box_rad+15.25+1.75; //surge length is 15.25
+surge_y_wall = -box_rad+15.25+2.75; //surge length is 15.25
 
 poison_x_wall = 0;
 poison_y_wall = -box_rad+(ion_side/2)-3;
@@ -97,16 +97,24 @@ difference() {
                                     $fn = 64
                                 );
                             translate([(-shield_pocket_radius*0.33)+shield_x_wall,
-                            -box_rad+9, box_z+0.1 - pocket_depth])linear_extrude(
-                            height=pocket_depth)square(
-                            [shield_pocket_radius*0.66,4]);
+                            -box_rad+9, box_z+0.1 - pocket_depth]){
+                                linear_extrude(height=pocket_depth){
+                                    square([shield_pocket_radius*0.66,4]);
+                                }                                
+                            }
+                            //shield icon
+                            translate([-20,-49,3])scale([0.18,0.18]){
+                                color("yellow")linear_extrude(height=2)shield_icon();
+                            }
                         }
                        
                        // wound token pocket
                        translate([wound_x_wall,
-                        wound_y_wall, box_z+0.1 - pocket_depth])
-                        linear_extrude(height=pocket_depth){
-                            create_wound_token();
+                        wound_y_wall, box_z+0.1 - pocket_depth]){
+                            linear_extrude(height=pocket_depth){
+                                create_wound_token();
+                            }
+                            rotate([0,0,-4])translate([-6.5,-6.5,0])color("red")scale([0.1,0.1])wound_icon();
                         }
                         
                         //ion token pocket
@@ -211,7 +219,7 @@ difference() {
     translate([surge_x_wall,surge_y_wall-0.1,box_z+0.1- pocket_depth]){
         linear_extrude(height=pocket_depth){
             create_surge_token();
-            //translate([-6,5])square([12,5]);
+            translate([-6,-10])square([12,5]);
         }    
     }
     
@@ -224,3 +232,4 @@ difference() {
     color("blue")translate([-box_rad+8, 4, box_z-lip_cut-1])cylinder(h=magnet_h+2, d=magnet_d);
 
 }
+//color("yellow")translate([11,-72, box_z+0.1- pocket_depth])scale([0.15,0.15,1])shield_icon();
