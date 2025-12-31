@@ -1,7 +1,7 @@
 use <Token_Shapes.scad>;
 
 // Box dimensions
-box_x = 145;
+box_x = 195;
 box_y = 46;
 box_z = 20;
 
@@ -13,17 +13,24 @@ pocket_depth  = box_z - 3;
 shield_x_wall = 12;
 shield_y_wall = 10;
 
-wound_x_wall = 90;
+wound_x_wall = 110;
 wound_y_wall = 10;
 
-ion_x_wall = 65;
+ion_x_wall = 85;
 ion_y_wall = 0;
 
 old_obs_x_wall = 36;
 old_obs_y_wall = 10;
 
-surge_x_wall = 110;
+obs_x_wall = 64;
+obs_y_wall = 8;
+
+surge_x_wall = 130;
 surge_y_wall = 7;
+
+poison_x_wall = 149;
+poison_y_wall = 0;
+
 
 // Opposite side of holder
 vehicle_x_wall = 45;
@@ -43,6 +50,10 @@ sup_y_wall = box_y-8;
 
 sup_x_wall2 = sup_x_wall+25;
 sup_y_wall2 = box_y-8;
+
+immobilize_x_wall = 178;
+immobilize_y_wall = 0;
+
 
 //Create holder box
 difference() {
@@ -118,11 +129,19 @@ difference() {
         }    
     }
     
-    //Create observation token
+    //Create old observation token
     translate([old_obs_x_wall,old_obs_y_wall-0.1,box_z+0.1- pocket_depth]){
         linear_extrude(height=pocket_depth){
             rotate([0,0,90])create_old_observation_token();
             //translate([-6,5])square([12,5]);
+        }    
+    }
+    
+    //Create observation token
+    translate([obs_x_wall,obs_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            create_observation_token();
+            color("red")translate([-7,-10])square([14,5]);
         }    
     }
     
@@ -158,4 +177,19 @@ difference() {
         }    
     }
     
+    //poison token pocket (same size & shape as ion)
+    translate([poison_x_wall,poison_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            create_ion_token();
+            translate([-7,0])square([14,5]); //extra cutout for ion
+        }    
+    }
+    
+    //Immobilize token pocket (same size & shape as ion)
+    translate([immobilize_x_wall,immobilize_y_wall-0.1,box_z+0.1- pocket_depth]){
+        linear_extrude(height=pocket_depth){
+            create_ion_token();
+            translate([-7,0])square([14,5]); //extra cutout for ion
+        }    
+    }
 }

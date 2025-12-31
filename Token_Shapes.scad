@@ -307,3 +307,31 @@ module create_observation_token(){
     circle(r = 9.75);
 
 }
+
+module create_POI_token(){
+    circle(r = 25.7);
+}
+
+wound_circle_size= 16;
+wound_square_size = 3;
+module create_wound_token(){
+    union(){
+        circle(d=wound_circle_size);
+        wound_points = [[5.5, -5.5],
+        [-5.5, 5.5],
+        [9.0, 9.0]];
+        
+        polygon(points = wound_points);
+
+        mirror([1,0,0]){
+            polygon(points = wound_points);
+        }
+        mirror([0,1,0]){
+            polygon(points = wound_points);
+        }
+        mirror([1,1,0]){
+            polygon(points = wound_points);
+        }
+        translate([-8, -10.1, 0])square([16, wound_square_size]);
+        }
+}
