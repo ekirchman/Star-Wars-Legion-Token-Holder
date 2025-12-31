@@ -263,7 +263,7 @@ module create_surge_token(surge_size=15.25){
 }
 
 module create_dodge_token(){
-    circle(r = 10.25, $fn = 6);
+    circle(r = 10.5, $fn = 6);
 }
 
 module create_dodge_icon(){
