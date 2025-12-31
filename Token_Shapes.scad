@@ -380,3 +380,45 @@ module shield_icon(){
 module wound_icon(){
     import("svgs/wound.svg");
 }
+
+module lightning_icon(){
+    rotate([0,0,60])mirror([1,1,0])square([4.5,14]);
+    translate([-7,-12])rotate([0,0,60])mirror([0,1,0])square([4.5,10]);
+
+    //translate([11,-9.65])rotate([0,0,-120])
+    
+    translate([-1.5,-15])rotate([0,0,-120])mirror([0,0,0])polygon(points=[
+    [0, 0],
+    [40/8, 0],   // base
+    [0, 30/8]    // height
+    ]);
+    
+}
+
+module ion_icon(){
+    // ion Side length
+    s = 23;
+    // Height of ion equilateral triangle
+    h = s * sqrt(3) / 2;
+    union(){
+        rotate([0,0,120]){
+            union(){
+                rotate([0,0,120]){
+                    union(){
+                        translate([-s*(1/2),-s*(1/3),0]){
+                            
+                            polygon(points=[
+                            [0, 0],        // Point A
+                            [s, 0],        // Point B
+                            [s/2, h]       // Point C
+                            ]);
+                        }
+                      lightning_icon();
+                    }
+                }
+                lightning_icon();
+            }
+        }
+        lightning_icon();
+    }
+}

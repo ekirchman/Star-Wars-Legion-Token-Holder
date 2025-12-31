@@ -104,7 +104,7 @@ difference() {
                             }
                             //shield icon
                             translate([-20,-49,3])scale([0.18,0.18]){
-                                color("yellow")linear_extrude(height=2)shield_icon();
+                                linear_extrude(height=2)shield_icon();
                             }
                         }
                        
@@ -114,7 +114,7 @@ difference() {
                             linear_extrude(height=pocket_depth){
                                 create_wound_token();
                             }
-                            rotate([0,0,-4])translate([-6.5,-6.5,0])color("red")scale([0.1,0.1])wound_icon();
+                            rotate([0,0,-4])translate([-6.5,-6.5,-1])linear_extrude(height=2)scale([0.1,0.1])wound_icon();
                         }
                         
                         //ion token pocket
@@ -122,8 +122,15 @@ difference() {
                             linear_extrude(height=pocket_depth){
                                 create_ion_token();
                                 translate([-7,0])square([14,5]); //extra cutout for ion
-                            }    
+                            }
+                            //ion icon
+                            translate([0,12,-1]){
+                                linear_extrude(height=2){
+                                    scale([0.4,0.4])ion_icon();
+                                }
+                            }
                         }
+                        
                     }
                     
                     //poison token pocket (same size & shape as ion)
@@ -232,4 +239,5 @@ difference() {
     color("blue")translate([-box_rad+8, 4, box_z-lip_cut-1])cylinder(h=magnet_h+2, d=magnet_d);
 
 }
+
 //color("yellow")translate([11,-72, box_z+0.1- pocket_depth])scale([0.15,0.15,1])shield_icon();
