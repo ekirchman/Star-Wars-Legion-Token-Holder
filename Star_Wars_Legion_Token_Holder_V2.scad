@@ -32,6 +32,9 @@ ion_y_wall = -box_rad+(ion_side/2)-3;
 old_obs_x_wall = -14;
 old_obs_y_wall = -box_rad+(9.2*2)+2; //circle radius is 9.2
 
+dodge_x_wall = -14;
+dodge_y_wall = -box_rad+(9.2*2); //circle radius is 9.2
+
 obs_x_wall = -20;
 obs_y_wall = -box_rad+((9.75*2)-1);
 
@@ -139,6 +142,8 @@ difference() {
                             create_ion_token();
                             translate([-7,0])square([14,5]); //extra cutout for ion
                         }    
+                        //poison icon
+                        translate([-6,8,-1])linear_extrude(height=2)poison_icon();
                     }
                     
                     //Immobilize token pocket (same size & shape as ion)
@@ -146,7 +151,9 @@ difference() {
                         linear_extrude(height=pocket_depth){
                             create_ion_token();
                             translate([-7,0])square([14,5]); //extra cutout for ion
-                        }    
+                        }
+                    //immobilize icon    
+                    translate([-6,8,-1])linear_extrude(height=2)immobilize_icon();
                     }
                 }
                 
@@ -155,7 +162,9 @@ difference() {
                 translate([vehicle_x_wall,vehicle_y_wall-0.1,box_z+0.1- pocket_depth]){
                     rotate([0,0,90])linear_extrude(height=pocket_depth){
                         create_vehicle_token();
-                    }    
+                    }
+                //damage icon
+                translate([-14,5,-1])linear_extrude(height=2)damage_icon();
                 }
                 
                 //Create commander token
@@ -175,7 +184,7 @@ difference() {
                     }
                 }    
             }
-            
+            /*
             //Create old observation token
             translate([old_obs_x_wall,old_obs_y_wall-0.1,box_z+0.1- pocket_depth]){
                 linear_extrude(height=pocket_depth){
@@ -183,13 +192,22 @@ difference() {
                     //translate([-6,5])square([12,5]);
                 }    
             }
+            */
+            translate([dodge_x_wall,dodge_y_wall-0.1,box_z+0.1- pocket_depth]){
+                linear_extrude(height=pocket_depth){
+                    create_dodge_token();
+                    //translate([-6,5])square([12,5]);
+                }    
+                //dodge icon
+                translate([0,0,-1])linear_extrude(height=2)create_dodge_icon();
+            }
         }
         
         //Create observation token
         translate([obs_x_wall,obs_y_wall-0.1,box_z+0.1- pocket_depth]){
             linear_extrude(height=pocket_depth){
                 create_observation_token();
-                color("red")translate([-7,-10])square([14,5]);
+                translate([-7,-10])square([14,5]);
             }    
         }
         
@@ -234,9 +252,9 @@ difference() {
     lip_cut = 3;
     color("gray")translate([0, 0, box_z-3])cylinder(h=box_z-lip_cut, r = box_rad-1, $fn = 6);
     //magnets
-    color("red")translate([24, -box_rad+15, box_z-lip_cut-1])cylinder(h=magnet_h+2, d=magnet_d);
-    color("green")translate([39, box_rad-31, box_z-lip_cut-1])cylinder(h=magnet_h+2, d=magnet_d);
-    color("blue")translate([-box_rad+8, 4, box_z-lip_cut-1])cylinder(h=magnet_h+2, d=magnet_d);
+    color("red")translate([24, -box_rad+15, box_z-lip_cut-2])cylinder(h=magnet_h+2, d=magnet_d);
+    color("green")translate([39, box_rad-31, box_z-lip_cut-2])cylinder(h=magnet_h+2, d=magnet_d);
+    color("blue")translate([-box_rad+8, 4, box_z-lip_cut-2])cylinder(h=magnet_h+2, d=magnet_d);
 
 }
 

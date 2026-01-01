@@ -422,3 +422,14 @@ module ion_icon(){
         lightning_icon();
     }
 }
+module poison_icon(){
+    scale([0.05,0.05])import("svgs/poison.svg");
+}
+
+module immobilize_icon(){
+    scale([0.05,0.05])import("svgs/immobilize.svg");
+}
+
+module damage_icon(){
+    translate([2,-2.5])scale([0.03,0.03])import("svgs/damage.svg");
+}
