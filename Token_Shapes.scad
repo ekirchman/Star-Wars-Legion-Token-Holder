@@ -309,7 +309,7 @@ module create_observation_token(){
 }
 
 module create_POI_token(){
-    circle(r = 25.7);
+    circle(r = 26);
 }
 
 wound_circle_size= 16;
