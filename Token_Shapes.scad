@@ -456,8 +456,8 @@ module POI_icon(){
     union(){
         difference(){
             circle(r=9.75);
-            translate([0,-1])color("red")square([20,2]);
-            mirror([1,0,0])translate([0,-1])color("green")square([20,2]);
+            translate([0,-1])square([20,2]);
+            mirror([1,0,0])translate([0,-1])square([20,2]);
             circle(r=6.0);
         }
         circle(r=4.0);

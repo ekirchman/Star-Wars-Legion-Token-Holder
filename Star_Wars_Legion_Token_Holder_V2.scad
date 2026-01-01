@@ -88,7 +88,7 @@ difference() {
                                 offset(thumb_POI_radius)
                                 translate([0,-POI_rad-3])square(thumb_POI_length - 2*thumb_POI_radius, center=true);
                                 }
-                                scale([2,2])POI_icon();
+                                translate([0,0,-1])linear_extrude(height=2)scale([2,2])POI_icon();
                             }
 
                         // Shield pocket
@@ -217,7 +217,7 @@ difference() {
                 translate([-7,-10])square([14,5]);
             }    
             //observation icon
-            scale([1.5,1.5])rotate([0,0,90])translate([0,0,-1])linear_extrude(height=2)color("orange")observation_icon();
+            scale([1.5,1.5])rotate([0,0,90])translate([0,0,-1])linear_extrude(height=2)observation_icon();
         }
         
         //Create standby token
@@ -226,7 +226,7 @@ difference() {
                 create_standby_token();
                 translate([-6,-10])square([12,5]);
             }
-            scale([1.5,1.5])rotate([0,0,90])translate([0,0,-1])linear_extrude(height=2)color("yellow")standby_icon();
+            scale([1.5,1.5])rotate([0,0,90])translate([0,0,-1])linear_extrude(height=2)standby_icon();
         }
         
         //Create supression token
