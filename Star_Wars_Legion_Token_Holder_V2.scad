@@ -4,7 +4,7 @@ use <Token_Shapes.scad>;
 // Box dimensions
 box_x = 195;
 box_y = 46;
-box_z = 10;
+box_z = 28;
 
 box_rad = 70;
 
@@ -94,21 +94,19 @@ difference() {
                         // Shield pocket
                         union(){
                             translate([shield_x_wall,
-                            shield_y_wall, box_z+0.1 - pocket_depth])
+                            shield_y_wall, box_z+0.1 - pocket_depth]){
                                 cylinder(
                                     h = pocket_depth,
                                     d = shield_pocket_radius,
                                     $fn = 64
                                 );
+                                translate([0,0,-1])linear_extrude(height=2)scale([0.18,0.18])shield_icon();
+                            }
                             translate([(-shield_pocket_radius*0.33)+shield_x_wall,
                             -box_rad+9, box_z+0.1 - pocket_depth]){
                                 linear_extrude(height=pocket_depth){
                                     square([shield_pocket_radius*0.66,4]);
                                 }                                
-                            }
-                            //shield icon
-                            translate([-20,-49,3])scale([0.18,0.18]){
-                                linear_extrude(height=2)shield_icon();
                             }
                         }
                        
@@ -226,7 +224,7 @@ difference() {
                 create_standby_token();
                 translate([-6,-10])square([12,5]);
             }
-            scale([1.5,1.5])rotate([0,0,90])translate([0,0,-1])linear_extrude(height=2)standby_icon();
+            scale([1.2,1.2])rotate([0,0,90])translate([0,0,-1])linear_extrude(height=2)standby_icon();
         }
         
         //Create supression token
