@@ -56,7 +56,7 @@ aim_x_wall = 14;
 aim_y_wall = -box_rad+14.2+4; //aim radius is 7.1, side is 14.2. Square cutout is 5
 
 stby_x_wall = 0;
-stby_y_wall = -box_rad+(7.6*2);
+stby_y_wall = -box_rad+(7.6*2)+4;
 
 sup_x_wall = 22;
 sup_y_wall = -box_rad+(((22*1.2)/3)*2);
@@ -181,8 +181,12 @@ difference() {
                     rotate([0,0,180]){
                         create_aim_token();
                         translate([-6,5])square([12,5]);
+                        
                     }
-                }    
+                }
+            
+                //aim icon
+                rotate([0,0,23])translate([0,0,-1])linear_extrude(height=2)aim_icon();
             }
             /*
             //Create old observation token
@@ -209,14 +213,17 @@ difference() {
                 create_observation_token();
                 translate([-7,-10])square([14,5]);
             }    
+            //observation icon
+            scale([1.5,1.5])rotate([0,0,90])translate([0,0,-1])linear_extrude(height=2)color("orange")observation_icon();
         }
         
         //Create standby token
         translate([stby_x_wall,stby_y_wall-0.1,box_z+0.1- pocket_depth]){
             linear_extrude(height=pocket_depth){
-                rotate([0,0,90])create_standby_token();
-                translate([-6,5])square([12,5]);
-            }    
+                create_standby_token();
+                translate([-6,-10])square([12,5]);
+            }
+            scale([1.5,1.5])rotate([0,0,90])translate([0,0,-1])linear_extrude(height=2)color("yellow")standby_icon();
         }
         
         //Create supression token
@@ -259,3 +266,4 @@ difference() {
 }
 
 //color("yellow")translate([11,-72, box_z+0.1- pocket_depth])scale([0.15,0.15,1])shield_icon();
+//translate([10,10,-1])linear_extrude(height=20)color("green")aim_icon();

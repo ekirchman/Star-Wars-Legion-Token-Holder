@@ -433,3 +433,15 @@ module immobilize_icon(){
 module damage_icon(){
     translate([2,-2.5])scale([0.03,0.03])import("svgs/damage.svg");
 }
+
+module aim_icon(){
+    translate([7,-7])rotate([0,0,90])scale([0.1,0.1])import("svgs/aim.svg");
+}
+
+module observation_icon(){
+    translate([7,-7])rotate([0,0,90])scale([0.1,0.1])import("svgs/observation.svg");
+}
+
+module standby_icon(){
+    translate([7,-7])rotate([0,0,90])scale([0.1,0.1])import("svgs/standby.svg");
+}
