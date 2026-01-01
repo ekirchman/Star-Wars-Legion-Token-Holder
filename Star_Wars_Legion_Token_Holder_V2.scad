@@ -86,8 +86,9 @@ difference() {
                                 thumb_POI_length = 24; //(mm)
                                 POI_rad = 25.7;
                                 offset(thumb_POI_radius)
-                                translate([0,-POI_rad-3])square(thumb_POI_length - 2*thumb_POI_radius, center=true);;
+                                translate([0,-POI_rad-3])square(thumb_POI_length - 2*thumb_POI_radius, center=true);
                                 }
+                                scale([2,2])POI_icon();
                             }
 
                         // Shield pocket
@@ -153,7 +154,7 @@ difference() {
                             translate([-7,0])square([14,5]); //extra cutout for ion
                         }
                     //immobilize icon    
-                    translate([-6,8,-1])linear_extrude(height=2)immobilize_icon();
+                    translate([-5,9,-1])linear_extrude(height=2)immobilize_icon();
                     }
                 }
                 
@@ -171,7 +172,9 @@ difference() {
                 translate([commander_x_wall,commander_y_wall-0.1,box_z+0.1- pocket_depth]){
                     linear_extrude(height=pocket_depth){
                         create_commander_token();
-                    }    
+                    }
+                    //commander icon
+                    scale([2,2])translate([-3,-3,-1])linear_extrude(height=2)commander_icon();
                 }
             }
             
@@ -233,7 +236,9 @@ difference() {
                     create_sup_token();
                     translate([-6,5])square([12,5]);
                 }
-            }    
+            }
+        //Suppression icon
+            scale([1.7,1.7])rotate([0,0,30])suppression_icon();
         }
     }
     
@@ -244,7 +249,9 @@ difference() {
                 create_sup_token();
                 translate([-6,5])square([12,5]);
             }
-        }    
+        }
+        //Suppression icon
+        scale([1.7,1.7])rotate([0,0,30])suppression_icon();    
     }
     
     //Create surge token
@@ -253,6 +260,8 @@ difference() {
             create_surge_token();
             translate([-6,-10])square([12,5]);
         }    
+        //surge icon
+        rotate([0,0,45])surge_icon();
     }
     
     //Create a cut for the lip

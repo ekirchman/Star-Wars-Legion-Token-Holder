@@ -445,3 +445,69 @@ module observation_icon(){
 module standby_icon(){
     translate([7,-7])rotate([0,0,90])scale([0.1,0.1])import("svgs/standby.svg");
 }
+
+module suppression_icon(){
+    translate([4,-5])rotate([0,0,90])scale([0.1,0.1])import("svgs/Suppression.svg");
+}
+module surge_icon(){
+    translate([8.75,-8.75])rotate([0,0,90])scale([0.1,0.1])import("svgs/surge.svg");
+}
+module POI_icon(){
+    union(){
+        difference(){
+            circle(r=9.75);
+            translate([0,-1])color("red")square([20,2]);
+            mirror([1,0,0])translate([0,-1])color("green")square([20,2]);
+            circle(r=6.0);
+        }
+        circle(r=4.0);
+    }
+}
+
+module commander_icon(){
+
+    commander_s = 6;
+    commander_h = commander_s * sqrt(3) / 2;
+    neg_commander_s = 4;
+    neg_commander_h = neg_commander_s * sqrt(3) / 2;
+    small_commander_s = 2.5;
+    small_commander_h = small_commander_s * sqrt(3) / 2;
+    union(){
+        difference(){
+            polygon(points=[
+            [0, 0],        // Point A
+            [commander_s, 0],        // Point B
+            [commander_s/2, commander_h]       // Point C
+            ]);
+
+            translate([1,0])
+            polygon(points=[
+            [0, 0],        // Point A
+            [neg_commander_s, 0],        // Point B
+            [neg_commander_s/2, neg_commander_h]       // Point C
+            ]);
+        }
+        scale([1.5,1.5])
+        translate([0.75,-0.5])polygon(points=[
+        [0, 0],        // Point A
+        [small_commander_s, 0],        // Point B
+        [small_commander_s/2, small_commander_h]       // Point C
+        ]);
+
+        translate([0,1.6])
+        scale([1.2,1.2])
+        mirror([0,1,0])translate([-small_commander_s*(1/2),-small_commander_s*(1/3)])polygon(points=[
+            [0, 0],        // Point A
+            [small_commander_s, 0],        // Point B
+            [small_commander_s/2, small_commander_h]       // Point C
+            ]);
+
+        translate([6,1.6])
+        scale([1.2,1.2])
+        mirror([0,1,0])translate([-small_commander_s*(1/2),-small_commander_s*(1/3)])polygon(points=[
+            [0, 0],        // Point A
+            [small_commander_s, 0],        // Point B
+            [small_commander_s/2, small_commander_h]       // Point C
+            ]);
+    }
+}
