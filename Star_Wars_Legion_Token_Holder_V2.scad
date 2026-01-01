@@ -238,7 +238,7 @@ difference() {
                 }
             }
         //Suppression icon
-            scale([1.7,1.7])rotate([0,0,30])suppression_icon();
+            translate([0,0,-1])linear_extrude(height=2)scale([1.7,1.7])rotate([0,0,30])suppression_icon();
         }
     }
     
@@ -251,7 +251,7 @@ difference() {
             }
         }
         //Suppression icon
-        scale([1.7,1.7])rotate([0,0,30])suppression_icon();    
+        translate([0,0,-1])linear_extrude(height=2)scale([1.7,1.7])rotate([0,0,30])suppression_icon();    
     }
     
     //Create surge token
@@ -261,7 +261,7 @@ difference() {
             translate([-6,-10])square([12,5]);
         }    
         //surge icon
-        rotate([0,0,45])surge_icon();
+        translate([0,0,-1])linear_extrude(height=2)rotate([0,0,45])surge_icon();
     }
     
     //Create a cut for the lip
